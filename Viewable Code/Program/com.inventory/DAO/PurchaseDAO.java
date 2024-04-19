@@ -198,7 +198,10 @@ public class ProductDAO {
       ex.printStackTrace();
     } 
   }
-  
+
+  //
+  //"checkStock" looks at current stock and product code to return existing data from that table.
+  //
   public boolean checkStock(String prodCode) {
     try {
       String query = "SELECT * FROM currentstock WHERE productcode='" + prodCode + "'";
@@ -210,7 +213,10 @@ public class ProductDAO {
     } 
     return this.flag;
   }
-  
+
+  //
+  //Responds to user "product has already been added" if product already exists in database. If not, then "addFunction" is run.
+  //
   public void addProductDAO(ProductDTO productDTO) {
     try {
       String query = "SELECT * FROM products WHERE productname='" + productDTO.getProdName() + "' AND costprice='" + productDTO.getCostPrice() + "' AND sellprice='" + productDTO.getSellPrice() + "' AND brand='" + productDTO.getBrand() + "'";
@@ -224,7 +230,10 @@ public class ProductDAO {
       e.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows the user to add a new product data.
+  //
   public void addFunction(ProductDTO productDTO) {
     try {
       String query = "INSERT INTO products VALUES(null,?,?,?,?,?)";
@@ -245,7 +254,10 @@ public class ProductDAO {
       throwables.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows the user to add purchase by checking stock (via product code).
+  //
   public void addPurchaseDAO(ProductDTO productDTO) {
     try {
       String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
@@ -284,7 +296,10 @@ public class ProductDAO {
     } 
     deleteStock();
   }
-  
+
+  //
+  //This code allows user to edit a product's data.
+  //
   public void editProdDAO(ProductDTO productDTO) {
     try {
       String query = "UPDATE products SET productname=?,costprice=?,sellprice=?,brand=? WHERE productcode=?";
@@ -305,7 +320,10 @@ public class ProductDAO {
       throwables.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows user to edit pruchase stock data.
+  //
   public void editPurchaseStock(String code, int quantity) {
     try {
       String query = "SELECT * FROM currentstock WHERE productcode='" + code + "'";
@@ -321,7 +339,10 @@ public class ProductDAO {
       throwables.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows user to edit sold stock data.
+  //
   public void editSoldStock(String code, int quantity) {
     try {
       String query = "SELECT * FROM currentstock WHERE productcode='" + code + "'";
@@ -337,7 +358,10 @@ public class ProductDAO {
       throwables.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows user to delete a stock data.
+  //
   public void deleteStock() {
     try {
       String query = "DELETE FROM currentstock WHERE productcode NOT IN(SELECT productcode FROM purchaseinfo)";
@@ -348,7 +372,10 @@ public class ProductDAO {
       throwables.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows user to delete a product's data.
+  //
   public void deleteProductDAO(String code) {
     try {
       String query = "DELETE FROM products WHERE productcode=?";
@@ -365,7 +392,10 @@ public class ProductDAO {
     } 
     deleteStock();
   }
-  
+
+  //
+  //This code allows user to delete a purchase's data.
+  //
   public void deletePurchaseDAO(int ID) {
     try {
       String query = "DELETE FROM purchaseinfo WHERE purchaseID=?";
@@ -378,7 +408,10 @@ public class ProductDAO {
     } 
     deleteStock();
   }
-  
+
+  //
+  //This code allows user to delete a sale's data.
+  //
   public void deleteSaleDAO(int ID) {
     try {
       String query = "DELETE FROM salesinfo WHERE salesID=?";
@@ -391,7 +424,10 @@ public class ProductDAO {
     } 
     deleteStock();
   }
-  
+
+  //
+  //This code allows user to sell product based on stock and quantity.
+  //
   public void sellProductDAO(ProductDTO productDTO, String username) {
     int quantity = 0;
     String prodCode = null;
@@ -417,7 +453,10 @@ public class ProductDAO {
       throwables.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code returns product data from database.
+  //
   public ResultSet getQueryResult() {
     try {
       String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products ORDER BY pid";
@@ -427,7 +466,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns purchase info of a product's data.
+  //
   public ResultSet getPurchaseInfo() {
     try {
       String query = "SELECT PurchaseID,purchaseinfo.ProductCode,ProductName,Quantity,Totalcost FROM purchaseinfo INNER JOIN products ON products.productcode=purchaseinfo.productcode ORDER BY purchaseid;";
@@ -437,7 +479,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns current stock info based on product data.
+  //
   public ResultSet getCurrentStockInfo() {
     try {
       String query = "SELECT currentstock.ProductCode,products.ProductName,\ncurrentstock.Quantity,products.CostPrice,products.SellPrice\nFROM currentstock INNER JOIN products\nON currentstock.productcode=products.productcode;\n";
@@ -447,7 +492,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns sales info based on product's data and quantatiy, revenue, and user.
+  //
   public ResultSet getSalesInfo() {
     try {
       String query = "SELECT salesid,salesinfo.productcode,productname,\nsalesinfo.quantity,revenue,users.name AS Sold_by\nFROM salesinfo INNER JOIN products\nON salesinfo.productcode=products.productcode\nINNER JOIN users\nON salesinfo.soldby=users.username;\n";
@@ -457,7 +505,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns a product search.
+  //
   public ResultSet getProductSearch(String text) {
     try {
       String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products WHERE productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
@@ -467,7 +518,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns product from product code using product code, name, costprice, sellprice, and brand.
+  //
   public ResultSet getProdFromCode(String text) {
     try {
       String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products WHERE productcode='" + text + "' LIMIT 1";
@@ -477,7 +531,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns a sales search.
+  //
   public ResultSet getSalesSearch(String text) {
     try {
       String query = "SELECT salesid,salesinfo.productcode,productname,\n                    salesinfo.quantity,revenue,users.name AS Sold_by\n                    FROM salesinfo INNER JOIN products\n                    ON salesinfo.productcode=products.productcode\n                    INNER JOIN users\n                    ON salesinfo.soldby=users.username\n                    INNER JOIN customers\n                    ON customers.customercode=salesinfo.customercode\nWHERE salesinfo.productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR users.name LIKE '%" + text + "%' OR customers.fullname LIKE '%" + text + "%' ORDER BY salesid;";
@@ -487,7 +544,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns a purchase search.
+  //
   public ResultSet getPurchaseSearch(String text) {
     try {
       String query = "SELECT PurchaseID,purchaseinfo.productcode,products.productname,quantity,totalcost FROM purchaseinfo INNER JOIN products ON purchaseinfo.productcode=products.productcode INNER JOIN suppliers ON purchaseinfo.suppliercode=suppliers.suppliercodeWHERE PurchaseID LIKE '%" + text + "%' OR productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR suppliers.fullname LIKE '%" + text + "%' OR purchaseinfo.suppliercode LIKE '%" + text + "%' OR date LIKE '%" + text + "%' ORDER BY purchaseid";
@@ -497,7 +557,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns a product's name from product (-> product code)
+  //
   public ResultSet getProdName(String code) {
     try {
       String query = "SELECT productname FROM products WHERE productcode='" + code + "'";
@@ -507,7 +570,10 @@ public class ProductDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns supplier name.
+  //
   public String getSuppName(int ID) {
     String name = null;
     try {
@@ -520,7 +586,10 @@ public class ProductDAO {
     } 
     return name;
   }
-  
+
+  //
+  //This code returns a customer's name.
+  //
   public String getCustName(int ID) {
     String name = null;
     try {
@@ -533,7 +602,10 @@ public class ProductDAO {
     } 
     return name;
   }
-  
+
+  //
+  //This code returns a purchase date.
+  //
   public String getPurchaseDate(int ID) {
     String date = null;
     try {
@@ -546,7 +618,10 @@ public class ProductDAO {
     } 
     return date;
   }
-  
+
+  //
+  //This code returns a sale date.
+  //
   public String getSaleDate(int ID) {
     String date = null;
     try {
@@ -559,7 +634,10 @@ public class ProductDAO {
     } 
     return date;
   }
-  
+
+  //
+  //This code creates the table using columns.
+  //
   public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
     ResultSetMetaData metaData = resultSet.getMetaData();
     Vector<String> columnNames = new Vector<>();
