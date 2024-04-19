@@ -13,6 +13,9 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+//
+//This code creates "CustomerDAO" class and connects to the corresponding customer sql table.
+//
 public class CustomerDAO {
   Connection conn = null;
   
@@ -30,7 +33,10 @@ public class CustomerDAO {
       e.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code responds to the user "Customer already exists" when trying to add a new customer that already is in the database; otherwise, code runs addFunction to create a new customer.
+  //
   public void addCustomerDAO(CustomerDTO customerDTO) {
     try {
       String query = "SELECT * FROM customers WHERE fullname='" + customerDTO.getFullName() + "' AND location='" + customerDTO.getLocation() + "' AND phone='" + customerDTO.getPhone() + "'";
@@ -44,7 +50,10 @@ public class CustomerDAO {
       e.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows the user to add a new customer's data.
+  //
   public void addFunction(CustomerDTO customerDTO) {
     try {
       String query = "INSERT INTO customers VALUES(null,?,?,?,?)";
@@ -59,7 +68,10 @@ public class CustomerDAO {
       e.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows the user to update/edit a customer's data.
+  //
   public void editCustomerDAO(CustomerDTO customerDTO) {
     try {
       String query = "UPDATE customers SET fullname=?,location=?,phone=? WHERE customercode=?";
@@ -74,7 +86,10 @@ public class CustomerDAO {
       e.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code allows user to delete a customer's data
+  //
   public void deleteCustomerDAO(String custCode) {
     try {
       String query = "DELETE FROM customers WHERE customercode='" + custCode + "'";
@@ -84,7 +99,10 @@ public class CustomerDAO {
       e.printStackTrace();
     } 
   }
-  
+
+  //
+  //This code returns results of customer's data.
+  //
   public ResultSet getQueryResult() {
     try {
       String query = "SELECT customercode,fullname,location,phone FROM customers";
@@ -94,7 +112,10 @@ public class CustomerDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code allows the user to search for a specific customer.
+  //
   public ResultSet getCustomerSearch(String text) {
     try {
       String query = "SELECT customercode,fullname,location,phone FROM customers WHERE customercode LIKE '%" + text + "%' OR fullname LIKE '%" + text + "%' OR location LIKE '%" + text + "%' OR phone LIKE '%" + text + "%'";
@@ -114,7 +135,10 @@ public class CustomerDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code returns a product's name using product code
+  //
   public ResultSet getProdName(String prodCode) {
     try {
       String query = "SELECT productname,currentstock.quantity FROM products INNER JOIN currentstock ON products.productcode=currentstock.productcode WHERE currentstock.productcode='" + prodCode + "'";
@@ -124,7 +148,10 @@ public class CustomerDAO {
     } 
     return this.resultSet;
   }
-  
+
+  //
+  //This code builds the customer table using columns.
+  //
   public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
     ResultSetMetaData metaData = resultSet.getMetaData();
     Vector<String> columnNames = new Vector<>();
